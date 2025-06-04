@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoMVC.Models;
-using ProyectoMVC.ViewModels;
-
+using ProyectoMVC.Models.ViewModels;
 public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -13,23 +12,45 @@ public class AccountController : Controller
         _userManager = userManager;
         _signInManager = signInManager;
     }
+    
+    [HttpGet]
+    public IActionResult LoginModal()
+    {
+        return PartialView("~/Views/Account/_LoginModal.cshtml", new LoginVM());
+    }
 
     [HttpGet]
-    public IActionResult Register() => View();
+    public IActionResult RegisterModal()
+    {
+        return PartialView("~/Views/Account/_RegisterModal.cshtml", new RegisterVM());
+    }
+
+
+
+    //[HttpGet]
+    //public IActionResult Register() => View();
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public async Task<IActionResult> RegisterModal(RegisterVM model)
     {
         if (ModelState.IsValid)
         {
             var user = new ApplicationUser
             {
-                UserName = model.Email,
+                UserName = model.Email.Split('@')[0],
                 Email = model.Email,
-                name = model.Nombre,
-                secondName = model.Apellido,
-                registerDate = DateTime.Now,
-                active = true
+                EmailConfirmed = false,
+                name = model.Name,
+                secondName = model.SecondName,
+                registerDate = DateTime.UtcNow,
+                lastLogin = DateTime.UtcNow,
+                active = true,
+                NormalizedUserName = model.Email.Split('@')[0].ToUpper(),
+                NormalizedEmail = model.Email.ToUpper(),
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -44,14 +65,14 @@ public class AccountController : Controller
                 ModelState.AddModelError("", error.Description);
         }
 
-        return View(model);
+        return PartialView("~/Views/Account/_RegisterModal.cshtml", model);
     }
 
     [HttpGet]
     public IActionResult Login() => View();
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginVM model)
     {
         if (ModelState.IsValid)
         {

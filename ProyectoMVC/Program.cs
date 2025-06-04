@@ -12,7 +12,12 @@ builder.Services.AddControllersWithViews();
 var connetionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString)));
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -32,7 +37,7 @@ app.UseAuthorization();
 //app.MapStaticAssets();
 app.UseStaticFiles();
 
-app.MapRazorPages();
+//app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

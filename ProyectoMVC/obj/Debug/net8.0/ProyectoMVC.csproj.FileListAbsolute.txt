@@ -1,11 +1,3 @@
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.csproj.AssemblyReference.cache
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.AssemblyInfoInputs.cache
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.AssemblyInfo.cs
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.csproj.CoreCompileInputs.cache
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.RazorAssemblyInfo.cache
-C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.RazorAssemblyInfo.cs
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\appsettings.json
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\ProyectoMVC.staticwebassets.runtime.json
@@ -214,6 +206,15 @@ C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\tr\Micros
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.csproj.AssemblyReference.cache
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.AssemblyInfoInputs.cache
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.AssemblyInfo.cs
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.csproj.CoreCompileInputs.cache
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.RazorAssemblyInfo.cache
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.RazorAssemblyInfo.cs
+C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.sourcelink.json
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\scopedcss\bundle\ProyectoMVC.styles.css
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\scopedcss\projectbundle\ProyectoMVC.bundle.scp.css
@@ -227,5 +228,3 @@ C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\refint\Pr
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.pdb
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.genruntimeconfig.cache
 C:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ref\ProyectoMVC.dll
-c:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.UI.dll
-c:\Users\Lucas\source\VSC\ProyectoASP.NET\ProyectoMVC\obj\Debug\net8.0\ProyectoMVC.MvcApplicationPartsAssemblyInfo.cs

@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
-public class RegisterVM
+namespace ProyectoMVC.Models.ViewModels
+{
+    public class RegisterVM
 {
     [Required]
-    public string Nombre { get; set; }
+    public string Name { get; set; }
 
     [Required]
-    public string Apellido { get; set; }
+    public string SecondName { get; set; }
 
     [Required]
     [EmailAddress]
@@ -19,4 +21,6 @@ public class RegisterVM
     [Compare("Password")]
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; }
+}
+
 }

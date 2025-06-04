@@ -1,0 +1,35 @@
+@model ProyectoMVC.Models.ViewModels.LoginVM
+
+<div class="modal-header">
+  <h5 class="modal-title">Iniciar sesión</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+</div>
+
+<div class="modal-body">
+  <form asp-controller="Account" asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+      <label asp-for="Email" class="form-label">Correo electrónico</label>
+      <input asp-for="Email" class="form-control" placeholder="ejemplo@email.com" />
+      <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label asp-for="Password" class="form-label">Contraseña</label>
+      <input asp-for="Password" type="password" class="form-control" placeholder="Contraseña" />
+      <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+      <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+    </button>
+  </form>
+
+  <div class="text-center mt-3">
+    <p class="mb-0">¿No tenés cuenta?  
+      <a href="#" onclick="abrirAuthModal('/Account/RegisterModal')">Registrate</a>
+    </p>
+  </div>
+</div>
+

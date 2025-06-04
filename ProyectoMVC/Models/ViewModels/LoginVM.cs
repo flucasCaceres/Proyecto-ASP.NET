@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-public class LoginViewModel
+namespace ProyectoMVC.Models.ViewModels
+{
+    public class LoginVM
 {
     [Required]
     [EmailAddress]
@@ -12,3 +14,5 @@ public class LoginViewModel
 
     public bool RememberMe { get; set; }
 }
+}
+
