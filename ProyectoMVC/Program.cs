@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
 //porque es clave para la seguridad?
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = false; //para que pueda ingresar sin antes confirmar el email se debe poner true 
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
