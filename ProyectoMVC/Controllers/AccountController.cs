@@ -17,13 +17,13 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult LoginModal()
+    public IActionResult Login()
     {
         return PartialView("~/Views/Account/_LoginModal.cshtml", new LoginVM());
     }
 
     [HttpGet]
-    public IActionResult RegisterModal()
+    public IActionResult Register()
     {
         return PartialView("~/Views/Account/_RegisterModal.cshtml", new RegisterVM());
     }
@@ -35,7 +35,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RegisterModal(RegisterVM model)
+    public async Task<IActionResult> Register(RegisterVM model)
     {
         if (!ModelState.IsValid)
         {
@@ -45,13 +45,13 @@ public class AccountController : Controller
 
         var user = new ApplicationUser
         {
-            UserName    = model.Email.Split('@')[0],
-            Email       = model.Email,
-            name        = model.Name,
-            secondName  = model.SecondName,
-            registerDate= DateTime.UtcNow,
-            lastLogin   = DateTime.UtcNow,
-            active      = true
+            UserName = model.Email.Split('@')[0],
+            Email = model.Email,
+            name = model.Name,
+            secondName = model.SecondName,
+            registerDate = DateTime.UtcNow,
+            lastLogin = DateTime.UtcNow,
+            active = true
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
@@ -75,12 +75,6 @@ public class AccountController : Controller
 
     //[HttpGet]
     //public IActionResult Login() => View();
-    [HttpGet]
-    public IActionResult Login()
-    {
-        return PartialView("~/Views/Account/_LoginModal.cshtml", new LoginVM());
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginVM model)
@@ -93,9 +87,9 @@ public class AccountController : Controller
 
         // 2) Intentamos firmar al usuario
         var result = await _signInManager.PasswordSignInAsync(
-            model.Email, 
-            model.Password, 
-            model.RememberMe, 
+            model.Email.Split('@')[0],
+            model.Password,
+            model.RememberMe,
             lockoutOnFailure: false // true para bloquear en caso de fallos de contraseña. Post produccion
         );
 
@@ -168,4 +162,109 @@ public class AccountController : Controller
         return Content("❌ " + string.Join(" / ", result.Errors.Select(e => e.Description)));
     }
     }*/
+
+    // En tu AccountController (o donde tengas inyectado SignInManager<ApplicationUser>):
+    [HttpGet]
+    public async Task<IActionResult> TestCrearUsuario()
+    {
+        var user = new ApplicationUser
+        {
+            UserName = "prueba1@mail.com",
+            Email = "prueba1@mail.com",
+            name = "Lucas",
+            secondName = "Test",
+            registerDate = DateTime.UtcNow,
+            lastLogin = DateTime.UtcNow,
+            active = true
+        };
+
+        var result = await _userManager.CreateAsync(user, "Test123!");
+
+        if (result.Succeeded)
+        {
+            return Content("✅ Usuario creado");
+        }
+        else
+        {
+            return Content("❌ " + string.Join(" / ", result.Errors.Select(e => e.Description)));
+        }
+    }
+
+    // En tu AccountController (o donde tengas inyectado SignInManager<ApplicationUser>):
+    [HttpGet]
+    public async Task<IActionResult> TestLogin()
+    {
+        // 1) Credenciales “de prueba”:
+        string emailDePrueba = "lucas";
+        string passwordDePrueba = "Lucas2025!"; // debe coincidir con la contraseña real del usuario
+
+        // 2) Intentamos el sign-in directamente con el SignInManager
+        var resultado = await _signInManager.PasswordSignInAsync(
+            emailDePrueba,
+            passwordDePrueba,
+            isPersistent: false,       // RememberMe = false
+            lockoutOnFailure: false    // no bloqueamos por este test
+        );
+
+        // 3) Chequeamos si el login fue exitoso
+        if (resultado.Succeeded)
+        {
+            // Si todo salió bien, devolvemos un “200 OK” con mensaje simple
+            return Ok(new
+            {
+                success = true,
+                mensaje = "TestLogin: login exitoso para " + emailDePrueba
+            });
+        }
+        else if (resultado.IsLockedOut)
+        {
+            // Caso de usuario bloqueado
+            return BadRequest(new
+            {
+                success = false,
+                mensaje = "TestLogin: el usuario está bloqueado."
+            });
+        }
+        else if (resultado.RequiresTwoFactor)
+        {
+            // Caso de 2FA activado
+            return BadRequest(new
+            {
+                success = false,
+                mensaje = "TestLogin: requiere autenticación de dos factores."
+            });
+        }
+        else
+        {
+            // Cualquier otro fallo (credenciales inválidas, usuario no existe, etc.)
+            return BadRequest(new
+            {
+                success = false,
+                mensaje = "TestLogin: usuario o contraseña inválida."
+            });
+        }
+    }
+    [HttpGet]
+    public IActionResult TestUsuarioLogueado()
+    {
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            // El usuario ya está autenticado
+            // Devuelve, por ejemplo, el nombre de usuario
+            return Ok(new
+            {
+                loggedIn = true,
+                userName = User.Identity.Name  // aquí aparece el UserName (= claim “name” o “sub”, según cómo lo hayas configurado)
+            });
+        }
+        else
+        {
+            // No hay nadie logueado
+            return Ok(new
+            {
+                loggedIn = false
+            });
+        }
+    }
+
 }
