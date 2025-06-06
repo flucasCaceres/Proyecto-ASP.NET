@@ -18,7 +18,7 @@ namespace ProyectoMVC.Models.ViewModels
     [DataType(DataType.Password)]
     public string Password { get; set; }
 
-    [Compare("Password")]
+    [Compare("Password", ErrorMessage = "Las contraseñas no coinciden")]
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; }
 }

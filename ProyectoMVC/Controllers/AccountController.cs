@@ -1,18 +1,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoMVC.Models;
+using ProyectoMVC.Models.Data;
 using ProyectoMVC.Models.ViewModels;
 public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly ApplicationDbContext _context;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _context = context;
     }
-    
+
     [HttpGet]
     public IActionResult LoginModal()
     {
@@ -31,60 +34,91 @@ public class AccountController : Controller
     //public IActionResult Register() => View();
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> RegisterModal(RegisterVM model)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var user = new ApplicationUser
-            {
-                UserName = model.Email.Split('@')[0],
-                Email = model.Email,
-                EmailConfirmed = false,
-                name = model.Name,
-                secondName = model.SecondName,
-                registerDate = DateTime.UtcNow,
-                lastLogin = DateTime.UtcNow,
-                active = true,
-                NormalizedUserName = model.Email.Split('@')[0].ToUpper(),
-                NormalizedEmail = model.Email.ToUpper(),
-                PhoneNumberConfirmed = false,
-                TwoFactorEnabled = false,
-                LockoutEnabled = true,
-                AccessFailedCount = 0
-            };
+            // Si ModelState no es válido → devuelvo el mismo partial con las etiquetas de validación
+            return PartialView("~/Views/Account/_RegisterModal.cshtml", model);
+        }
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+        var user = new ApplicationUser
+        {
+            UserName    = model.Email.Split('@')[0],
+            Email       = model.Email,
+            name        = model.Name,
+            secondName  = model.SecondName,
+            registerDate= DateTime.UtcNow,
+            lastLogin   = DateTime.UtcNow,
+            active      = true
+        };
 
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
-            }
+        var result = await _userManager.CreateAsync(user, model.Password);
 
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+        if (result.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            // Devolvemos JSON para que el AJAX sepa que fue exitoso
+            return Json(new { success = true });
+        }
+
+        // Si CreateAsync falló (contraseña débil, email duplicado, etc.),
+        // cargamos los errores en ModelState y devolvemos de nuevo el partial
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError("", error.Description);
         }
 
         return PartialView("~/Views/Account/_RegisterModal.cshtml", model);
     }
 
+    //[HttpGet]
+    //public IActionResult Login() => View();
     [HttpGet]
-    public IActionResult Login() => View();
+    public IActionResult Login()
+    {
+        return PartialView("~/Views/Account/_LoginModal.cshtml", new LoginVM());
+    }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginVM model)
     {
-        if (ModelState.IsValid)
+        // 1) Si el modelo (email, password, etc.) está inválido, devolvemos el partial con errores
+        if (!ModelState.IsValid)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-            if (result.Succeeded)
-                return RedirectToAction("Index", "Home");
-
-            ModelState.AddModelError("", "Login inválido.");
+            return PartialView("~/Views/Account/_LoginModal.cshtml", model);
         }
 
-        return View(model);
+        // 2) Intentamos firmar al usuario
+        var result = await _signInManager.PasswordSignInAsync(
+            model.Email, 
+            model.Password, 
+            model.RememberMe, 
+            lockoutOnFailure: false // true para bloquear en caso de fallos de contraseña. Post produccion
+        );
+
+        if (result.Succeeded)
+        {
+            // 3) Login exitoso → devolvemos JSON para que el JS sepa redirigir
+            return Json(new { success = true });
+        }/*
+        else if (result.IsLockedOut)
+        {
+            ModelState.AddModelError("", "Usuario bloqueado por demasiados intentos fallidos. Intenta más tarde.");
+        }
+        else if (result.RequiresTwoFactor)
+        {
+            ModelState.AddModelError("", "Este usuario requiere autenticación en dos pasos.");
+        }*/
+        else
+        {
+            ModelState.AddModelError("", "Login inválido. Verificá email y contraseña.");
+        }
+
+        // 4) Si falla, devolvemos de nuevo el partial con los errores cargados en ModelState
+        return PartialView("~/Views/Account/_LoginModal.cshtml", model);
     }
 
     [HttpPost]
@@ -93,4 +127,45 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
     }
+
+    /*
+    [HttpGet]
+    public async Task<IActionResult> ConfirmEmail(string userId, string token)
+    {
+        if (userId == null || token == null)
+            return RedirectToAction("Index", "Home");
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return NotFound();
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        return result.Succeeded ? View("ConfirmEmail") : View("Error");
+    }*/
+    /*
+    [HttpGet]
+    public async Task<IActionResult> TestCrearUsuario()
+    {
+    var user = new ApplicationUser
+    {
+        UserName = "prueba1",
+        Email = "prueba1@mail.com",
+        name = "Lu",
+        secondName = "Test",
+        registerDate = DateTime.UtcNow,
+        lastLogin = DateTime.UtcNow,
+        active = true
+    };
+
+    var result = await _userManager.CreateAsync(user, "Test123!");
+
+    if (result.Succeeded)
+    {
+        return Content("✅ Usuario creado");
+    }
+    else
+    {
+        return Content("❌ " + string.Join(" / ", result.Errors.Select(e => e.Description)));
+    }
+    }*/
 }
