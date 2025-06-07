@@ -6,7 +6,7 @@
 </div>
 
 <div class="modal-body">
-  <form id="registerForm" method="post">
+  <form id="registerForm" asp-action="Register" asp-controller="Account" method="post">
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 

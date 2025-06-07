@@ -28,11 +28,6 @@ public class AccountController : Controller
         return PartialView("~/Views/Account/_RegisterModal.cshtml", new RegisterVM());
     }
 
-
-
-    //[HttpGet]
-    //public IActionResult Register() => View();
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterVM model)
